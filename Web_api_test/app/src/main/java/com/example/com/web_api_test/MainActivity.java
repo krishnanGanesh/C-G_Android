@@ -20,8 +20,8 @@ public class MainActivity extends AppCompatActivity {
     EditText emailText;
     TextView responseView;
     ProgressBar progressBar;
-    static final String API_KEY = "USE_YOUR_OWN_API_KEY";
-    static final String API_URL = "http://google.com";
+   // static final String API_KEY = "USE_YOUR_OWN_API_KEY";
+    static final String API_URL = "http://couponsandgiveawaysapi.azurewebsites.net/api/login/login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
