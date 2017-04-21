@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
    // static final String API_KEY = "USE_YOUR_OWN_API_KEY";
     static final String API_URL = "http://couponsandgiveawaysapi.azurewebsites.net/api/login/login";
+    static final String API_URL_trial = "http://google.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,57 +50,28 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        protected String doInBackground(Void... urls) {
-
-            // Do some validation here
+        protected String doInBackground(Void... urls)
+        {
+            String ret = new String();
+            HttpWrapper ob = new HttpWrapper();
+            try {
+                ret = ob.Post(API_URL,"username","password");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             try {
-                URL url = new URL(API_URL );
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                try {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line).append("\n");
-                    }
-                    bufferedReader.close();
-
-                    return stringBuilder.toString();
-                }
-                finally{
-                    urlConnection.disconnect();
-                }
+                ret = ob.Get(API_URL_trial);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            catch(Exception e) {
-                Log.e("ERROR", e.getMessage(), e);
-                return null;
-            }
+            return ret;
         }
 
         protected void onPostExecute(String response) {
             if(response == null) {
                 response = "THERE WAS AN ERROR";
             }
-
-            Log.i("INFO", response);
-            TextView display = (TextView) findViewById(R.id.textView);
-            display.setText(response);
-            // TODO: check this.exception
-            // TODO: do something with the feed
-
-//            try {
-//                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
-//                String requestID = object.getString("requestId");
-//                int likelihood = object.getInt("likelihood");
-//                JSONArray photos = object.getJSONArray("photos");
-//                .
-//                .
-//                .
-//                .
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
         }
     }
 }
